@@ -75,21 +75,37 @@ io.on("connection", (socket) => {
 	});
 
 	//send and get message
-	socket.on("sendMessage", async ({ meta, text,time }) => {
+	socket.on("sendMessage", async ({ meta, text, time }) => {
 		const user = await User.findOne({ _id: meta.receiver });
 		// const user = getUser(meta.receiver);
 		if (user.socketId) {
 			io.to(user.socketId).emit("getMessage", {
 				sender: meta.sender,
 				text,
-				createdAt:time
+				createdAt: time,
 			});
 		}
+	});
+
+	// socket.emit("me", socket.id);
+
+	// socket.on("disconnect", () => {
+	// 	socket.broadcast.emit("callEnded");
+	// });
+
+	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+	});
+
+	socket.on("answerCall", (data) => {
+		io.to(data.to).emit("callAccepted", data.signal);
 	});
 
 	//when disconnect
 	socket.on("disconnect", async () => {
 		console.log("a user disconnected!");
+		socket.broadcast.emit("callEnded");
+
 		const user = await User.findOneAndUpdate(
 			{ socketId: socket.id },
 			{ socketId: null }

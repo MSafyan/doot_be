@@ -21,7 +21,7 @@ const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
 const conversationRoute = require('./routes/conversations');
 const messageRoute = require('./routes/messages');
-const User = require('./models/User');
+const ConnectionSocket = require('./services/ConnectionSocket');
 
 dotenv.config();
 
@@ -44,85 +44,7 @@ app.use('/api/posts', postRoute);
 app.use('/api/conversations', conversationRoute);
 app.use('/api/messages', messageRoute);
 
-let users = [];
-
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
-
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
-
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-};
-
-io.on('connection', (socket) => {
-  //when ceonnect
-  console.log('a user connected.');
-
-  //take userId and socketId from user
-  socket.on('addUser', async (userId) => {
-    const user = await User.findOneAndUpdate(
-      { _id: userId },
-      { socketId: socket.id }
-    );
-    console.log('Added User', user.username, socket.id);
-  });
-
-  //send and get message
-  socket.on('sendMessage', async ({ meta, text, time }) => {
-    const user = await User.findOne({ _id: meta.receiver });
-    // const user = getUser(meta.receiver);
-    if (user.socketId) {
-      io.to(user.socketId).emit('getMessage', {
-        sender: meta.sender,
-        text,
-        createdAt: time,
-      });
-    }
-  });
-
-  // socket.emit("me", socket.id);
-
-  // socket.on("disconnect", () => {
-  // 	socket.broadcast.emit("callEnded");
-  // });
-
-  socket.emit('me', socket.id);
-
-  socket.on('callUser', async ({ userToCall, signalData, from }) => {
-    const user = await User.findOne({ _id: userToCall });
-    const userFrom = await User.findOne({ socketId: from });
-    console.log(
-      `${user.fullname} - ${user.socketId} is calling ${userFrom.fullname} - ${userFrom.socketId}`
-    );
-    io.to(user.socketId).emit('callUser', {
-      signal: signalData,
-      from: userFrom.socketId,
-      name: userFrom.fullname,
-    });
-  });
-
-  socket.on('answerCall', (data) => {
-    console.log('Accepted call', data.to);
-    io.to(data.to).emit('callAccepted', { signal: data.signal });
-  });
-  socket.on('disconnect', async () => {
-    console.log('a user disconnected!');
-    socket.broadcast.emit('callEnded');
-
-    const user = await User.findOneAndUpdate(
-      { socketId: socket.id },
-      { socketId: null }
-    );
-    console.log(user);
-    removeUser(socket.id);
-    io.emit('getUsers', users);
-  });
-});
+io.on('connection', ConnectionSocket(io));
 
 const port = process.env.PORT || 8000;
 const server = httpServer.listen(port, () => {

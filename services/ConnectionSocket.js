@@ -43,7 +43,14 @@ function ConnectionSocket(io) {
 
     socket.on('answerCall', (data) => {
       console.log('Accepted call', data.to);
-      io.to(data.to).emit('callAccepted', { signal: data.signal });
+      io.to(data.to).emit('callAccepted', {
+        signal: data.signal,
+        by: socket.id,
+      });
+    });
+
+    socket.on('endCall', async ({ socketId }) => {
+      io.to(socketId).emit('callEnded', { from: socket.id });
     });
 
     socket.on('disconnect', async () => {

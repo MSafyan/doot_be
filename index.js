@@ -20,6 +20,7 @@ const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
 const conversationRoute = require('./routes/conversations');
 const messageRoute = require('./routes/messages');
+const channelRoute = require('./routes/channels');
 const ConnectionSocket = require('./services/ConnectionSocket');
 
 dotenv.config();
@@ -47,8 +48,11 @@ app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/conversations', conversationRoute);
 app.use('/api/messages', messageRoute);
+app.use('/api/channels', channelRoute);
 
 io.on('connection', ConnectionSocket(io));
+
+app.set('io', io);
 
 const port = process.env.PORT || 8000;
 const server = httpServer.listen(port, () => {

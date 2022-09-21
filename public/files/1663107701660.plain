@@ -1,0 +1,29 @@
+The cities were very limited, the admin added more cities but only few were visible.
+When I put that no in end in registartion form the branches go to 0 auto
+Max 3 tags in profile seems like a limited option for big resutrants
+Typo in please add dine in 'pefore' you provide reservation (B)
+Error dine in is provded yet I can't provide reservation (B)
+Added location yet can't publish resutrant
+What are steps when adding QR code for a table
+QR can not be downloaded for the tables.
+Add Timing, option to select multiple days at once (F)
+The default time should be 00 for minutes.
+Some restarnts open twice a day, so their timing would not be hanlded here, like 12AM to 3 AM then 12 PM to 10 PM.
+Adding user throws internal server error to resturant
+Categories should be per restarnt
+Categories List undefined image should not be fetched or attempt to fetch.
+Categories Active button is useless
+Deleted a category no idea what would have happened to crosponding entries.
+Stats on returant page are fake or something
+Subscriptions API needs to be connected, currently it's static data.
+A lot of menu items don't have any description, so it should not be must.
+Adding menu items, start & end time should filled with resutants time, or general breakfast, dinner or luch timings depending on what the user selects.
+Can not add menu item sends, error internal server error. (The refresh token, needs to be updated again)
+Adding new item, the variation was auto filled.
+Approval of menu items does not work.
+Auto Approval for menu items does not work too (Related to token mabye)
+The approve button should be provded, instead of view and approve.
+The inovice button when selecting resutant form the admin panel, invoice button does not work.
+Adding buffet, incorrect error adding to time should be greater than adding from time. 
+Buffet, minimum items should be maximum items for delivery.
+Buffet Auto Approval for menu items does not work too (Related to token mabye)

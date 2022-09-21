@@ -13,7 +13,7 @@ function ConnectionSocket(io) {
     });
 
     //send and get message
-    socket.on('sendMessage', async ({ meta, text, time }) => {
+    socket.on('sendMessage', async ({ meta, text, time, file }) => {
       const user = await User.findOne({ _id: meta.receiver });
       // const user = getUser(meta.receiver);
       if (user.socketId) {
@@ -21,23 +21,26 @@ function ConnectionSocket(io) {
           sender: meta.sender,
           text,
           createdAt: time,
+          file,
         });
       }
     });
 
     socket.emit('me', socket.id);
 
-    socket.on('callUser', async ({ userToCall, signalData, from }) => {
+    socket.on('callUser', async ({ userToCall, signalData, from, isAudio }) => {
       const user = await User.findOne({ _id: userToCall });
       const userFrom = await User.findOne({ socketId: from });
       console.log('Users', user, userFrom);
       console.log(
-        `${userFrom.fullname} - ${userFrom.socketId} is calling ${user.fullname} - ${user.socketId}`
+        `${userFrom.fullname} - ${userFrom.socketId} - ${userFrom.profileImage} is calling ${user.fullname} - ${user.socketId} - ${isAudio} `
       );
       io.to(user.socketId).emit('callUser', {
         signal: signalData,
         from: userFrom.socketId,
         name: userFrom.fullname,
+        profileImage: userFrom.profileImage,
+        isAudio,
       });
     });
 
@@ -61,7 +64,6 @@ function ConnectionSocket(io) {
         { socketId: socket.id },
         { socketId: null }
       );
-      console.log(user);
     });
   };
 }

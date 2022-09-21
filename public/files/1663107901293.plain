@@ -1,0 +1,43 @@
+
+## User -> Table
+- name*
+- email*
+- password*
+- contact
+- gender (Male/Female/Other)
+
+## Owner  -> Table
+- name*
+- email*
+- password* 
+- contact
+- city*
+
+## salon -> Table
+- name*
+- city*
+- address*
+- price* (Low, Medium, High)
+- image
+- services (name, price)
+- description*
+- contact*
+- owner (ownerID)
+- active
+
+## Offer -> Table
+- image*
+- code*
+- amount*
+- active
+
+## Booking -> Table
+- salon* (salonID)
+- date*
+- services* (name, price)
+- offer (offerCode)
+- status (Pending/Confirmed/Completed/Cancelled)
+
+
+## ratings -> Table
+- rating (1-5)*

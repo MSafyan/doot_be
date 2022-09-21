@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -32,11 +32,11 @@ const UserSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "",
+      default: '',
     },
     coverPicture: {
       type: String,
-      default: "",
+      default: '',
     },
     followers: {
       type: Array,
@@ -66,8 +66,12 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       enum: [1, 2, 3],
     },
+    profileImage: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);

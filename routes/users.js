@@ -58,7 +58,6 @@ router.get('/', async (req, res) => {
 
 //get friends
 router.get('/friends/:userId', async (req, res) => {
-  console.warn('Getting frineds');
   try {
     const user = await User.findById(req.params.userId);
     const friends = await Promise.all(
@@ -67,7 +66,6 @@ router.get('/friends/:userId', async (req, res) => {
       })
     );
     let friendList = [...friends];
-    console.log('Sending friends', friendList);
     res.status(200).json(friendList);
   } catch (err) {
     res.status(500).json(err);

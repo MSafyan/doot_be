@@ -37,7 +37,7 @@ app.use(morgan('common'));
 app.use(cors());
 
 mongoose
-  .connect(process.env.DATABASE_LOCAL, {
+  .connect(process.env.DATABASE, {
     useNewUrlParser: true,
   })
   .then(() => console.log('DB connection successful!'));

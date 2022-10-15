@@ -3,12 +3,13 @@ const app = express();
 const httpServer = require('http').Server(app);
 const cors = require('cors');
 const { instrument } = require('@socket.io/admin-ui');
+const winston = require('winston');
 const io = require('socket.io')(httpServer, {
-  cors: {
-    origin: ['http://localhost:3000', 'https://admin.socket.io'],
-    methods: '*',
-    credentials: true,
-  },
+	cors: {
+		origin: ['http://localhost:3000', 'https://admin.socket.io'],
+		methods: '*',
+		credentials: true,
+	},
 });
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -28,21 +29,25 @@ dotenv.config();
 //middleware
 app.use(express.json());
 app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-  })
+	helmet({
+		crossOriginEmbedderPolicy: false,
+	})
 );
 app.use(morgan('common'));
 
 app.use(cors());
 
 mongoose
-  .connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-  })
-  .then(() => console.log('DB connection successful!'));
+	.connect(process.env.DATABASE, {
+		useNewUrlParser: true,
+	})
+	.then(() => console.log('DB connection successful!'));
 
-app.use(express.static('public'));
+require('./start/logging')();
+require('./start/routes')(app);
+require('./cronjob')();
+
+// app.use(express.static('public'));
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);
@@ -56,21 +61,21 @@ app.set('io', io);
 
 const port = process.env.PORT || 8000;
 const server = httpServer.listen(port, () => {
-  console.log(`App running on port ${port}...`);
+	winston.info(`Server is working on http://localhost:${port}`);
 });
 
 instrument(io, { auth: false });
 process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
-  // server.close(() => {
-  // 	process.exit(1);
-  // });
+	console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+	console.log(err.name, err.message);
+	// server.close(() => {
+	// 	process.exit(1);
+	// });
 });
 
 process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
-  server.close(() => {
-    console.log('💥 Process terminated!');
-  });
+	console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+	server.close(() => {
+		console.log('💥 Process terminated!');
+	});
 });

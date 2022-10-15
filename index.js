@@ -24,6 +24,8 @@ const io = require('socket.io')(httpServer, {
 			'http://localhost:3001',
 			'https://admin.socket.io',
 			'https://dootbe.herokuapp.com',
+			'https://socialfe.vercel.app',
+			'https://dootfe.vercel.app',
 		],
 		methods: '*',
 		credentials: true,

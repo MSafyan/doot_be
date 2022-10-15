@@ -5,17 +5,7 @@ const cors = require('cors');
 const { instrument } = require('@socket.io/admin-ui');
 const winston = require('winston');
 
-app.use(
-	cors({
-		origin: [
-			'http://localhost:3000',
-			'http://localhost:3001',
-			'https://dootbe.herokuapp.com',
-			'https://socialfe.vercel.app',
-			'https://dootfe.vercel.app',
-		],
-	})
-);
+app.use(cors());
 
 const io = require('socket.io')(httpServer, {
 	cors: {

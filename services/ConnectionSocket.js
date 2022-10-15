@@ -1,9 +1,19 @@
 const User = require('../models/User');
+const { v4 } = require('uuid');
+var rooms = {};
 
 function ConnectionSocket(io) {
 	return (socket) => {
 		//when ceonnect
 		console.log('a user connected.');
+
+		const createRoom = () => {
+			const roomId = v4();
+			rooms[roomId] = {};
+			socket.emit('room-created', { roomId });
+			console.log('user created the room');
+		};
+		socket.on('create-room', createRoom);
 
 		//take userId and socketId from user
 		socket.on('addUser', async (userId) => {

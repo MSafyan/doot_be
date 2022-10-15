@@ -11,12 +11,12 @@ const notification = require('../routes/notification');
 const stream = require('../routes/stream');
 
 module.exports = function (server) {
-	server.use(
-		cors({
-			methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-			origin: '*',
-		})
-	);
+	// server.use(
+	// 	cors({
+	// 		methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+	// 		origin: '*',
+	// 	})
+	// );
 	server.use(express.json({ limit: '50mb' }));
 	server.use(express.urlencoded({ limit: '50mb', extended: true }));
 	server.use(express.static('public'));

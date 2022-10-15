@@ -4,9 +4,25 @@ const httpServer = require('http').Server(app);
 const cors = require('cors');
 const { instrument } = require('@socket.io/admin-ui');
 const winston = require('winston');
+
+app.use(
+	cors({
+		origin: [
+			'http://localhost:3000',
+			'http://localhost:3001',
+			'https://dootbe.herokuapp.com',
+		],
+	})
+);
+
 const io = require('socket.io')(httpServer, {
 	cors: {
-		origin: ['http://localhost:3000', 'https://admin.socket.io'],
+		origin: [
+			'http://localhost:3000',
+			'http://localhost:3001',
+			'https://admin.socket.io',
+			'https://dootbe.herokuapp.com',
+		],
 		methods: '*',
 		credentials: true,
 	},
@@ -34,8 +50,6 @@ app.use(
 	})
 );
 app.use(morgan('common'));
-
-app.use(cors());
 
 mongoose
 	.connect(process.env.DATABASE, {

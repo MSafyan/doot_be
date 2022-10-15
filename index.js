@@ -11,6 +11,8 @@ app.use(
 			'http://localhost:3000',
 			'http://localhost:3001',
 			'https://dootbe.herokuapp.com',
+			'https://socialfe.vercel.app',
+			'https://dootfe.vercel.app',
 		],
 	})
 );

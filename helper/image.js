@@ -4,9 +4,7 @@ const json = require('../utils/jsonresponse');
 const saveImages = (req, type) => {
 	let date = Date.now();
 	let file = req.files.image;
-	let fileName = `${date}${req.user._id}${file.name.slice(
-		file.name.indexOf('.')
-	)}`;
+	let fileName = `${req.user._id}${file.name.slice(file.name.indexOf('.'))}`;
 	const newpath = `public/upload/${type}/${fileName}`;
 
 	file.mv(newpath, (err) => {
@@ -21,9 +19,7 @@ const saveImages = (req, type) => {
 const saveVideos = (req, type) => {
 	let date = Date.now();
 	let file = req.files.video;
-	let fileName = `${date}${req.user._id}${file.name.slice(
-		file.name.indexOf('.')
-	)}`;
+	let fileName = `${req.user._id}${file.name.slice(file.name.indexOf('.'))}`;
 	const newpath = `public/upload/${type}/${fileName}`;
 
 	file.mv(newpath, (err) => {
@@ -39,7 +35,7 @@ const saveDootFile = (req, type) => {
 	let date = Date.now();
 
 	let file = req.files.file;
-	let fileName = `${date}${file.name.slice(file.name.indexOf('.'))}`;
+	let fileName = `${file.name.slice(file.name.indexOf('.'))}`;
 	console.log({ fileName });
 
 	const newpath = `public/upload/${type}/${fileName}`;

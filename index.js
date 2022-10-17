@@ -5,7 +5,7 @@ const cors = require('cors');
 const { instrument } = require('@socket.io/admin-ui');
 const winston = require('winston');
 
-app.use(cors());
+// app.use(cors());
 
 const io = require('socket.io')(httpServer, {
 	cors: {

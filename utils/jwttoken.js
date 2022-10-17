@@ -7,8 +7,9 @@ const sendToken = (res, statusCode, message, user, token) => {
 		secure: false,
 		sameSite: 'lax',
 	};
+
 	res.cookie('token', token, {
-		domain: 'http://localhost:3000',
+		domain: process.env.COOKIE_URL,
 		path: '/',
 		secure: false,
 	});

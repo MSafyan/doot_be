@@ -1,6 +1,12 @@
-const sendToken = (res, statusCode, message, user, token) => {
+const sendToken = (
+	res,
+	statusCode,
+	message,
+	user,
+	token,
+	domain = process.env.COOKIE_URL
+) => {
 	//cookie
-	console.log('hi cookie');
 	const options = {
 		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 360),
 		httpOnly: true,
@@ -9,7 +15,7 @@ const sendToken = (res, statusCode, message, user, token) => {
 	};
 
 	res.cookie('token', token, {
-		domain: process.env.COOKIE_URL,
+		domain,
 		path: '/',
 		secure: false,
 	});

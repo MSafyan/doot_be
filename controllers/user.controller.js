@@ -52,6 +52,21 @@ exports.login = async (req, res) => {
 	}
 };
 
+// Login User
+exports.JwtAsCookie = async (req, res) => {
+	try {
+		const { token } = req.params;
+
+		let user = await User.findById(req.user._id).select('+password');
+		if (!user) return json(res, 404, 'User not found');
+
+		console.log('user1', user);
+		sendToken(res, 200, 'Login successfully', user, token, process.env.NTF_URL);
+	} catch (error) {
+		json(res, 500, error.message);
+	}
+};
+
 // Logout User
 exports.logout = async (req, res) => {
 	res.clearCookie('token');
@@ -141,9 +156,9 @@ exports.updateCover = async (req, res) => {
 // get me profile
 exports.profileMe = async (req, res) => {
 	try {
-		console.log('profile me', req.user.id);
+		// console.log('profile me', req.user.id);
 		const user = await User.findById(req.user._id).populate('posts');
-		console.log('user', user);
+		// console.log('user', user);
 
 		if (!user) return json(res, 404, 'User Not Found');
 		json(res, 200, null, user);
@@ -155,9 +170,9 @@ exports.profileMe = async (req, res) => {
 // when redirected from socials app to doot
 exports.loginRedirect = async (req, res) => {
 	try {
-		console.log('profile me', req.user.id);
+		// console.log('profile me', req.user.id);
 		const user = await User.findById(req.user._id);
-		console.log('user', user);
+		// console.log('user', user);
 
 		if (!user) return json(res, 404, 'User Not Found');
 		res.status(200).json(user);

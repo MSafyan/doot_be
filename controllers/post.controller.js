@@ -133,9 +133,10 @@ exports.timelinePosts = async (req, res) => {
 		const user = await User.findById(req.user._id);
 		let users = [...user.followingss, req.user._id];
 
-		let posts = await Post.find({ owner: { $in: users } }).populate(
-			'owner comments.user share.user'
-		);
+		// let posts = await Post.find({ owner: { $in: users } }).populate(
+		// 	'owner comments.user share.user'
+		// );
+		let posts = await Post.find().populate('owner comments.user share.user');
 		posts = posts.sort((a, b) => b.createdAt - a.createdAt);
 		json(res, 200, null, posts);
 	} catch (error) {

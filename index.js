@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const httpServer = require('http').Server(app);
-const cors = require('cors');
 const { instrument } = require('@socket.io/admin-ui');
 const winston = require('winston');
 
@@ -12,6 +11,7 @@ const io = require('socket.io')(httpServer, {
 		origin: [
 			'http://localhost:3000',
 			'http://localhost:3001',
+			'http://localhost:3002',
 			'https://admin.socket.io',
 			'https://dootbe.herokuapp.com',
 			'https://socialfe.vercel.app',
@@ -45,8 +45,12 @@ app.use(
 );
 app.use(morgan('common'));
 
+var database = process.env.DATABASE;
+if (process.env.NODE_ENV === 'development') {
+	database = process.env.DATABASE_LOCAL;
+}
 mongoose
-	.connect(process.env.DATABASE, {
+	.connect(database, {
 		useNewUrlParser: true,
 	})
 	.then(() => console.log('DB connection successful!'));
